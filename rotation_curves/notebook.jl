@@ -1,3 +1,131 @@
+### A Pluto.jl notebook ###
+# v0.15.1
+
+using Markdown
+using InteractiveUtils
+
+# ╔═╡ 5b39764e-0716-11ec-3336-919393abcbe7
+begin
+	using CSV
+	using DataFrames
+	using Plots
+end
+
+# ╔═╡ 338a1a6c-4fdf-47b4-babd-e9dc7719988e
+md"
+## Quelle
+
+NGC 7537 aus Tabelle 4 von [http://adsabs.harvard.edu/pdf/1985ApJ...289...81R]()
+
+Warum NGC 7537? Kein spezieller Grund, das ist noch eingescannt, muss also von Hand abgetippt werden. Ich habe eine Zeile mit möglichst vielen Einträgen gewählt.
+Außerdem ist die in Fig.6 aufgetragen
+"
+
+# ╔═╡ a1a59378-e427-4b30-9287-e748183898eb
+data = CSV.File("data") |> DataFrame
+
+# ╔═╡ 86a29a35-64e0-4930-b457-0266b103b218
+md"
+Ganz simple Dichteprofile.
+Geht nur um die r-Abhängigkeiten, nichts weiter.
+
+Die magic numbers später sind auch bloß 'von Hand optimiert', um einen brauchbaren Plot zu erzeugen.
+
+
+"
+
+# ╔═╡ 568592ba-a766-483c-88c5-2cce6eaeddba
+function density_naive(r, ρ_0)
+	# m const (Wir sind außerhalb des bulges, da kommt kaum noch Masse dazu)
+	ρ_0 / r^3
+end
+
+# ╔═╡ 70f1a03e-67ff-43cd-912a-a059db0c6396
+function density_dm(r, ρ_0)
+	# m ~ r (Wegen DM Halo)
+	ρ_0 / r^2
+end
+
+# ╔═╡ dfdab8b9-f893-4d76-816e-10e5bc3fef12
+begin
+	galaxy = "ngc7537"
+	G = 6.6e-11 # Hier wollte ich och echte Zahlen verwenden
+	ρ_0 = 0.8e13 # Das ist schon nur noch Optimierung per Hand ohne Physikgrundlage (Wie groß ist die Dichte einer Galaxie?)
+	S = 3 # kpc Größe des Bulge
+	R = range(minimum(data[:, "d"]), stop=maximum(data[:, "d"]), length=100)
+	R_solid = range(minimum(data[:, "d"]), stop=S+0.5, length=100)
+	R_kepler = range(S-0.5, stop=maximum(data[:, "d"]), length=100)
+	nothing
+end
+
+# ╔═╡ 5d25412d-4669-4597-8351-193e30e3a68a
+function rotation_velocity(r, ρ_0, s, profile)
+	if r < s
+		# Im Bulge konstante Dichte
+		ρ = ρ_0
+	else
+		if profile == "naive"
+			ρ = density_naive(r, ρ_0)
+		else
+			ρ = density_dm(r, ρ_0)
+		end
+	end
+	v = r * sqrt(G * 4 / 3 * π * ρ)
+end
+
+# ╔═╡ c222cc6d-bea3-4995-b343-57c16d87291e
+begin
+	plot(
+		data[:, "d"],
+		data[:, galaxy],
+		label="Messung",
+		linestyle=:dash,
+		marker=:dot,
+		ylim=[0, 200],
+		xlabel="Abstand vom Zentrum [kpc]",
+		ylabel="V [km s⁻¹]",
+	)
+	plot!(
+		R_solid,
+		rotation_velocity.(R_solid, ρ_0, S+1, "naive") .+ data[1, galaxy],
+		label="M∝r³"
+	)
+	plot!(
+		R_kepler,
+		rotation_velocity.(R_kepler, ρ_0, S-1, "naive") .* 5.5 .+ data[1, galaxy],
+		label="M=const"
+	)
+	plot!(
+		R,
+		rotation_velocity.(R, ρ_0, 0, "dm") .+ data[1, galaxy] .+ 90,
+		label="M∝r"
+	)
+end
+
+# ╔═╡ 364f1dd1-2d6c-4fe4-8f17-76f255b5d1da
+savefig("rotation_curve.png")
+
+# ╔═╡ e1abd30f-afda-449e-9c53-e48e6ccad3c1
+savefig("rotation_curve.svg")
+
+# ╔═╡ 1693705c-cd4c-423e-b69f-33534cfe2153
+
+
+# ╔═╡ 00000000-0000-0000-0000-000000000001
+PLUTO_PROJECT_TOML_CONTENTS = """
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+
+[compat]
+CSV = "~0.8.5"
+DataFrames = "~1.2.2"
+Plots = "~1.21.1"
+"""
+
+# ╔═╡ 00000000-0000-0000-0000-000000000002
+PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
 [[Adapt]]
@@ -53,31 +181,13 @@ version = "0.12.8"
 
 [[Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
-git-tree-sha1 = "79b9563ef3f2cc5fc6d3046a5ee1a57c9de52495"
+git-tree-sha1 = "727e463cfebd0c7b999bbf3e9e7e16f254b94193"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
-version = "3.33.0"
+version = "3.34.0"
 
 [[CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-
-[[Conda]]
-deps = ["JSON", "VersionParsing"]
-git-tree-sha1 = "299304989a5e6473d985212c28928899c74e9421"
-uuid = "8f4d0f93-b110-5947-807f-2305c1781a2d"
-version = "1.5.2"
-
-[[Configurations]]
-deps = ["Crayons", "ExproniconLite", "OrderedCollections", "TOML"]
-git-tree-sha1 = "b8486a417456d2fbbe2af13e24cef459c9f42429"
-uuid = "5218b696-f38b-4ac9-8b61-a12ec717816d"
-version = "0.15.4"
-
-[[ConstructionBase]]
-deps = ["LinearAlgebra"]
-git-tree-sha1 = "f74e9d5388b8620b4cee35d4c5a618dd4dc547f4"
-uuid = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
-version = "1.3.0"
 
 [[Contour]]
 deps = ["StaticArrays"]
@@ -140,11 +250,6 @@ git-tree-sha1 = "b3bfd02e98aedfa5cf885665493c5598c350cd2f"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
 version = "2.2.10+0"
 
-[[ExproniconLite]]
-git-tree-sha1 = "c97ce5069033ac15093dc44222e3ecb0d3af8966"
-uuid = "55351af7-c7e9-48d6-89ff-24e801d99491"
-version = "0.6.9"
-
 [[FFMPEG]]
 deps = ["FFMPEG_jll"]
 git-tree-sha1 = "b57e3acbe22f8484b4b5ff66a7499717fe1a9cc8"
@@ -156,9 +261,6 @@ deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "JLLWrappers",
 git-tree-sha1 = "3cc57ad0a213808473eafef4845a74766242e05f"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
 version = "4.3.1+4"
-
-[[FileWatching]]
-uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
 [[FixedPointNumbers]]
 deps = ["Statistics"]
@@ -193,12 +295,6 @@ version = "1.0.10+0"
 [[Future]]
 deps = ["Random"]
 uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
-
-[[FuzzyCompletions]]
-deps = ["REPL"]
-git-tree-sha1 = "2cc2791b324e8ed387a91d7226d17be754e9de61"
-uuid = "fb4132e2-a121-4a70-b8a1-d5b831dcdcc2"
-version = "0.4.3"
 
 [[GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Pkg", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll"]
@@ -421,21 +517,15 @@ version = "0.3.1"
 
 [[Missings]]
 deps = ["DataAPI"]
-git-tree-sha1 = "4ea90bd5d3985ae1f9a908bd4500ae88921c5ce7"
+git-tree-sha1 = "2ca267b08821e86c5ef4376cffed98a46c2cb205"
 uuid = "e1d29d7a-bbdc-5cf2-9ac0-f12de2c33e28"
-version = "1.0.0"
+version = "1.0.1"
 
 [[Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
 [[MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
-
-[[MsgPack]]
-deps = ["Serialization"]
-git-tree-sha1 = "a8cbf066b54d793b9a48c5daa5d586cf2b5bd43d"
-uuid = "99f44e22-a591-53d1-9472-aa23ef4bd671"
-version = "1.1.0"
 
 [[NaNMath]]
 git-tree-sha1 = "bfe47e760d60b82b66b61d2d44128b62e3a369fb"
@@ -498,21 +588,15 @@ version = "2.0.1"
 
 [[PlotUtils]]
 deps = ["ColorSchemes", "Colors", "Dates", "Printf", "Random", "Reexport", "Statistics"]
-git-tree-sha1 = "501c20a63a34ac1d015d5304da0e645f42d91c9f"
+git-tree-sha1 = "c67334c786157d6ef091ce622b365d3d60b1e2c4"
 uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
-version = "1.0.11"
+version = "1.0.12"
 
 [[Plots]]
-deps = ["Base64", "Contour", "Dates", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs"]
-git-tree-sha1 = "e39bea10478c6aff5495ab522517fae5134b40e3"
+deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs"]
+git-tree-sha1 = "0036d433cacff4767ff622be3cb2c281b773a2b4"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.20.0"
-
-[[Pluto]]
-deps = ["Base64", "Configurations", "Dates", "Distributed", "FileWatching", "FuzzyCompletions", "HTTP", "InteractiveUtils", "Logging", "Markdown", "MsgPack", "Pkg", "REPL", "Sockets", "TableIOInterface", "Tables", "UUIDs"]
-git-tree-sha1 = "6af6088f72ae82c8b6712047b5fe79c22016b878"
-uuid = "c3e4b0f8-55cb-11ea-2926-15256bba5781"
-version = "0.15.1"
+version = "1.21.1"
 
 [[PooledArrays]]
 deps = ["DataAPI", "Future"]
@@ -536,18 +620,6 @@ version = "1.1.0"
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 
-[[PyCall]]
-deps = ["Conda", "Dates", "Libdl", "LinearAlgebra", "MacroTools", "Serialization", "VersionParsing"]
-git-tree-sha1 = "169bb8ea6b1b143c5cf57df6d34d022a7b60c6db"
-uuid = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
-version = "1.92.3"
-
-[[PyPlot]]
-deps = ["Colors", "LaTeXStrings", "PyCall", "Sockets", "Test", "VersionParsing"]
-git-tree-sha1 = "67dde2482fe1a72ef62ed93f8c239f947638e5a2"
-uuid = "d330b81b-6aea-500a-939a-2ce795aea3ee"
-version = "2.9.0"
-
 [[Qt5Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Pkg", "Xorg_libXext_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "xkbcommon_jll"]
 git-tree-sha1 = "ad368663a5e20dbb8d6dc2fddeefe4dae0781ae8"
@@ -563,20 +635,20 @@ deps = ["Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [[RecipesBase]]
-git-tree-sha1 = "b3fb709f3c97bfc6e948be68beeecb55a0b340ae"
+git-tree-sha1 = "44a75aa7a527910ee3d1751d1f0e4148698add9e"
 uuid = "3cdcf5f2-1ef4-517c-9805-6587b60abb01"
-version = "1.1.1"
+version = "1.1.2"
 
 [[RecipesPipeline]]
 deps = ["Dates", "NaNMath", "PlotUtils", "RecipesBase"]
-git-tree-sha1 = "2a7a2469ed5d94a98dea0e85c46fa653d76be0cd"
+git-tree-sha1 = "32efa73dece357e9c834cae8af00265752c80061"
 uuid = "01d81517-befc-4cb6-b9ec-a95719d0359c"
-version = "0.3.4"
+version = "0.3.5"
 
 [[Reexport]]
-git-tree-sha1 = "5f6c21241f0f655da3952fd60aa18477cf96c220"
+git-tree-sha1 = "45e428421666073eab6f2da5c9d310d99bb12f9b"
 uuid = "189a3867-3050-52da-a836-e630ba90ab69"
-version = "1.1.0"
+version = "1.2.2"
 
 [[Requires]]
 deps = ["UUIDs"]
@@ -595,9 +667,9 @@ version = "1.1.0"
 
 [[SentinelArrays]]
 deps = ["Dates", "Random"]
-git-tree-sha1 = "a3a337914a035b2d59c9cbe7f1a38aaba1265b02"
+git-tree-sha1 = "54f37736d8934a12a200edea2f9206b03bdf3159"
 uuid = "91c51154-3ec4-41a3-a24f-3f23e20d615c"
-version = "1.3.6"
+version = "1.3.7"
 
 [[Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
@@ -648,18 +720,13 @@ version = "0.33.9"
 
 [[StructArrays]]
 deps = ["Adapt", "DataAPI", "StaticArrays", "Tables"]
-git-tree-sha1 = "000e168f5cc9aded17b6999a560b7c11dda69095"
+git-tree-sha1 = "1700b86ad59348c0f9f68ddc95117071f947072d"
 uuid = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
-version = "0.6.0"
+version = "0.6.1"
 
 [[TOML]]
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
-
-[[TableIOInterface]]
-git-tree-sha1 = "9a0d3ab8afd14f33a35af7391491ff3104401a35"
-uuid = "d1efa939-5518-4425-949f-ab857e148477"
-version = "0.1.6"
 
 [[TableTraits]]
 deps = ["IteratorInterfaceExtensions"]
@@ -692,17 +759,6 @@ uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
 [[Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
-
-[[Unitful]]
-deps = ["ConstructionBase", "Dates", "LinearAlgebra", "Random"]
-git-tree-sha1 = "a981a8ef8714cba2fd9780b22fd7a469e7aaf56d"
-uuid = "1986cc42-f94f-5a68-af5c-568840ba703d"
-version = "1.9.0"
-
-[[VersionParsing]]
-git-tree-sha1 = "80229be1f670524750d905f8fc8148e5a8c4537f"
-uuid = "81def892-9a0e-5fdd-b105-ffc91e053289"
-version = "1.2.0"
 
 [[Wayland_jll]]
 deps = ["Artifacts", "Expat_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg", "XML2_jll"]
@@ -913,3 +969,20 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "Wayland_jll", "Wayland_prot
 git-tree-sha1 = "ece2350174195bb31de1a63bea3a41ae1aa593b6"
 uuid = "d8fb68d0-12a3-5cfd-a85a-d49703b185fd"
 version = "0.9.1+5"
+"""
+
+# ╔═╡ Cell order:
+# ╠═5b39764e-0716-11ec-3336-919393abcbe7
+# ╟─338a1a6c-4fdf-47b4-babd-e9dc7719988e
+# ╠═a1a59378-e427-4b30-9287-e748183898eb
+# ╟─86a29a35-64e0-4930-b457-0266b103b218
+# ╠═568592ba-a766-483c-88c5-2cce6eaeddba
+# ╠═70f1a03e-67ff-43cd-912a-a059db0c6396
+# ╠═5d25412d-4669-4597-8351-193e30e3a68a
+# ╠═dfdab8b9-f893-4d76-816e-10e5bc3fef12
+# ╠═c222cc6d-bea3-4995-b343-57c16d87291e
+# ╠═364f1dd1-2d6c-4fe4-8f17-76f255b5d1da
+# ╠═e1abd30f-afda-449e-9c53-e48e6ccad3c1
+# ╠═1693705c-cd4c-423e-b69f-33534cfe2153
+# ╟─00000000-0000-0000-0000-000000000001
+# ╟─00000000-0000-0000-0000-000000000002
