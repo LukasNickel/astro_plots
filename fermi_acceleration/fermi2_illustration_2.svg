@@ -9,6 +9,9 @@
    id="svg5"
    inkscape:version="1.1 (c4e8f9ed74, 2021-05-24)"
    sodipodi:docname="fermi2_illustration_2.svg"
+   inkscape:export-filename="/run/media/lukas/media/Nextcloud/projects/astro_plots/fermi_acceleration/fermi2_illustration_2.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -27,12 +30,12 @@
      units="px"
      width="600px"
      inkscape:zoom="1.4142136"
-     inkscape:cx="383.25187"
-     inkscape:cy="222.38508"
-     inkscape:window-width="1920"
-     inkscape:window-height="1052"
-     inkscape:window-x="0"
-     inkscape:window-y="360"
+     inkscape:cx="448.30569"
+     inkscape:cy="102.53048"
+     inkscape:window-width="2560"
+     inkscape:window-height="1381"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
@@ -868,12 +871,14 @@
        id="path4261" />
     <g
        inkscape:label=""
-       transform="translate(-14.604646,-50.673683)"
-       id="g7409">
+       transform="matrix(0.76311298,0,0,0.76311298,7.3044421,-32.923325)"
+       id="g7409"
+       style="fill:#999999;fill-opacity:1">
       <g
-         id="g2989">
+         id="g2989"
+         style="fill:#999999;fill-opacity:1">
         <g
-           style="fill:#000000;fill-opacity:1"
+           style="fill:#999999;fill-opacity:1"
            id="g4524">
           <use
              xlink:href="#symbol4969"
@@ -881,10 +886,11 @@
              y="81.962997"
              id="use3358"
              width="100%"
-             height="100%" />
+             height="100%"
+             style="fill:#999999;fill-opacity:1" />
         </g>
         <g
-           style="fill:#000000;fill-opacity:1"
+           style="fill:#999999;fill-opacity:1"
            id="g4035">
           <use
              xlink:href="#symbol6465"
@@ -892,18 +898,21 @@
              y="83.457001"
              id="use9471"
              width="100%"
-             height="100%" />
+             height="100%"
+             style="fill:#999999;fill-opacity:1" />
         </g>
       </g>
     </g>
     <g
        inkscape:label=""
-       transform="translate(26.519217,-20.992528)"
-       id="g7733">
+       transform="matrix(0.9469724,0,0,0.9469724,21.692022,-17.30402)"
+       id="g7733"
+       style="stroke:#737373;stroke-opacity:1;fill:#747474;fill-opacity:1">
       <g
-         id="g55">
+         id="g55"
+         style="stroke:#737373;stroke-opacity:1;fill:#747474;fill-opacity:1">
         <g
-           style="fill:#000000;fill-opacity:1"
+           style="fill:#747474;fill-opacity:1;stroke:#737373;stroke-opacity:1"
            id="g1343">
           <use
              xlink:href="#symbol4354"
@@ -911,10 +920,11 @@
              y="81.962997"
              id="use9681"
              width="100%"
-             height="100%" />
+             height="100%"
+             style="stroke:#737373;stroke-opacity:1;fill:#747474;fill-opacity:1" />
         </g>
         <g
-           style="fill:#000000;fill-opacity:1"
+           style="fill:#747474;fill-opacity:1;stroke:#737373;stroke-opacity:1"
            id="g1376">
           <use
              xlink:href="#symbol4785"
@@ -922,13 +932,14 @@
              y="81.962997"
              id="use4437"
              width="100%"
-             height="100%" />
+             height="100%"
+             style="stroke:#737373;stroke-opacity:1;fill:#747474;fill-opacity:1" />
         </g>
       </g>
     </g>
     <g
        inkscape:label=""
-       transform="translate(-8.5297383,21.145562)"
+       transform="matrix(0.70265507,0,0,0.70265507,1.5535193,41.526595)"
        id="g8087">
       <g
          id="g1046">
@@ -969,7 +980,7 @@
     </g>
     <g
        inkscape:label=""
-       transform="translate(-10.821803,-73.49932)"
+       transform="matrix(0.68355218,0,0,0.68355218,14.272182,-38.596107)"
        id="g8485">
       <g
          id="g968">
@@ -1010,10 +1021,11 @@
     </g>
     <g
        inkscape:label=""
-       transform="translate(2.1185343,17.488678)"
+       transform="matrix(0.74191812,0,0,0.74191812,25.939493,39.027418)"
        id="g8917">
       <g
-         id="g8106">
+         id="g8106"
+         transform="matrix(0.91808136,0,0,0.91808136,-8.933531,11.851518)">
         <g
            style="fill:#000000;fill-opacity:1"
            id="g1193">
@@ -1040,10 +1052,11 @@
     </g>
     <g
        inkscape:label=""
-       transform="translate(3.4200018,-66.440377)"
+       transform="translate(1.8594375,-71.704627)"
        id="g9375">
       <g
-         id="g4085">
+         id="g4085"
+         transform="matrix(0.66694483,0,0,0.66694483,30.740993,25.039669)">
         <g
            style="fill:#000000;fill-opacity:1"
            id="g4109">
@@ -1070,12 +1083,14 @@
     </g>
     <g
        inkscape:label=""
-       transform="translate(-25.677949,-2.6886589)"
-       id="g9863">
+       transform="matrix(0.74751506,0,0,0.74751506,-2.7521065,19.081903)"
+       id="g9863"
+       style="fill:#999999;fill-opacity:1">
       <g
-         id="g287">
+         id="g287"
+         style="fill:#999999;fill-opacity:1">
         <g
-           style="fill:#000000;fill-opacity:1"
+           style="fill:#999999;fill-opacity:1"
            id="g3829">
           <use
              xlink:href="#symbol6992"
@@ -1083,10 +1098,11 @@
              y="81.962997"
              id="use6521"
              width="100%"
-             height="100%" />
+             height="100%"
+             style="fill:#999999;fill-opacity:1" />
         </g>
         <g
-           style="fill:#000000;fill-opacity:1"
+           style="fill:#999999;fill-opacity:1"
            id="g3309">
           <use
              xlink:href="#symbol6083"
@@ -1094,7 +1110,8 @@
              y="83.457001"
              id="use4821"
              width="100%"
-             height="100%" />
+             height="100%"
+             style="fill:#999999;fill-opacity:1" />
         </g>
       </g>
     </g>
