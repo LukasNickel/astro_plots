@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.15.1
+# v0.16.1
 
 using Markdown
 using InteractiveUtils
@@ -12,15 +12,18 @@ using Plots
 end
 
 # ╔═╡ c530e44c-57b1-4906-8a78-ac48eb8c9868
-"Quelle: https://gammaray.msfc.nasa.gov/batse/grb/catalog/current/index.html"
+md"Quelle für die Daten: https://gammaray.msfc.nasa.gov/batse/grb/catalog/current/index.html
+
+Die Grafik, um die es mir geht ist Abb1 aus https://arxiv.org/abs/1611.01948
+"
 
 # ╔═╡ 12d3f224-4bf1-44f5-9aba-e22955b24ac9
 md"
-Nicht alle grbs sind in beiden Tabellen for some reason. also drauf achten beim zusammenfügen
+Nicht alle grbs sind in beiden Tabellen for some reason. Das meiste passt aber.
 "
 
 # ╔═╡ 701093cd-e638-4f56-9789-4fe338229cc7
-dur = CSV.File(
+durations = CSV.File(
 	"dur",
 	header=1,
 	select=[:Trigger, :T90], 
@@ -35,47 +38,42 @@ flux = CSV.File(
 
 # ╔═╡ b5c03629-b565-426a-9796-03424a06b4ea
 md"
-The channel 1,2,3 and 4 fluences cover the energy ranges 20-50 keV, 50-100 keV, 100-300 keV, and E > 300 keV respectively.
+The channel 1,2,3 and 4 fluences cover the energy ranges 20-50 keV, 50-100 keV, 100-300 keV, and E > 300 keV respectively. Press F for Flux
 
-HR: (100-300)/(50-100) -> F3/F2
+Hardness is defined (in the paper the original image is from) as: F(100-300)/F(50-100) -> F3/F2
 "
 
 # ╔═╡ b542c518-5c4f-42d8-80d6-96d529b075cc
-joined = innerjoin(dur, flux, on=:Trigger)
+joined = innerjoin(durations, flux, on=:Trigger)
 
 # ╔═╡ 5c4a5372-76f0-476f-b059-1af1ceebc0bd
 joined.HR = joined.F3 ./ joined.F2
 
-# ╔═╡ 4579ef73-098c-4e27-9321-91a447d6dfde
-joined[10:50, :]
-
 # ╔═╡ 8fe3388d-0aed-42e5-ba3b-99aff23f771e
-scatter(
-	joined[!, "T90"],
-	joined[!, "HR"],
-	marker=:dot,
-	xlabel="T_90 [s]",
-	ylabel="Hardness Ratio",
-	yaxis=(:log10, (10^-1, 10^2)),
-	xaxis=(:log10, (10^-2, 10^3)),
-	label=""
-)
+begin
+	scatter(
+		joined[!, "T90"],
+		joined[!, "HR"],
+		marker=:dot,
+		xlabel="T_90 [s]",
+		ylabel="Hardness Ratio",
+		yaxis=(:log10, (10^-1, 10^2)),
+		xaxis=(:log10, (10^-2, 10^3)),
+		label=""
+	)
+	savefig("HR.svg")
+end
 
 # ╔═╡ cd304fb1-fd14-4e94-ae1b-5829d9719965
-histogram(
-	joined.T90, bins=10 .^(range(-2,stop=3,length=50)),
-	xaxis=(:log10, (10^-2, 10^3)),
-	label="",
-)
-
-# ╔═╡ d83302de-246c-459b-af10-9f3983bbdaac
-10 .^(range(-2,stop=3,length=10))
-
-# ╔═╡ 3191867d-6d1b-41c0-be6e-cc23396a4a05
-
-
-# ╔═╡ 06a4f8a5-9840-4f4b-87a6-2000eafada68
-
+begin
+	histogram(
+		joined.T90, bins=10 .^(range(-2,stop=3,length=50)),
+		xaxis=(:log10, (10^-2, 10^3)),
+		label="",
+		xlabel="T_90 [s]",
+	)
+	savefig("T90.svg")
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -959,19 +957,15 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╠═f8de7e2c-1a34-11ec-3641-7bea9673fd08
-# ╠═c530e44c-57b1-4906-8a78-ac48eb8c9868
+# ╟─f8de7e2c-1a34-11ec-3641-7bea9673fd08
+# ╟─c530e44c-57b1-4906-8a78-ac48eb8c9868
 # ╟─12d3f224-4bf1-44f5-9aba-e22955b24ac9
 # ╠═701093cd-e638-4f56-9789-4fe338229cc7
 # ╠═b4f54555-3c75-4b85-a380-61ef21977b61
-# ╠═b5c03629-b565-426a-9796-03424a06b4ea
+# ╟─b5c03629-b565-426a-9796-03424a06b4ea
 # ╠═b542c518-5c4f-42d8-80d6-96d529b075cc
 # ╠═5c4a5372-76f0-476f-b059-1af1ceebc0bd
-# ╠═4579ef73-098c-4e27-9321-91a447d6dfde
 # ╠═8fe3388d-0aed-42e5-ba3b-99aff23f771e
 # ╠═cd304fb1-fd14-4e94-ae1b-5829d9719965
-# ╠═d83302de-246c-459b-af10-9f3983bbdaac
-# ╠═3191867d-6d1b-41c0-be6e-cc23396a4a05
-# ╠═06a4f8a5-9840-4f4b-87a6-2000eafada68
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
