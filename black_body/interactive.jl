@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.15.1
+# v0.16.1
 
 using Markdown
 using InteractiveUtils
@@ -144,6 +144,7 @@ begin
 		y,
 		#xscale=:log10,
 		#yscale=:log10,
+		ylims=(0, 1.5*10^15),
 		xlim=[100, 1500],
 		xlabel="Wellenlänge [nm]",
 		ylabel="Intensität [W/m³]",
@@ -153,6 +154,15 @@ begin
 		lw=3
 	)
 end
+
+# ╔═╡ 041bb380-e08a-4ef9-b854-4f5fd623f929
+y
+
+# ╔═╡ 92ad16ba-31ad-4e27-8589-dcb1107a23a3
+log.(y)
+
+# ╔═╡ b31d28d2-1dd5-49ca-abcf-fa968d212bbc
+
 
 # ╔═╡ bf81999a-cf98-4833-a629-0cc4ed44d2d6
 "Maximale Wellenlänge: $(@sprintf("%.2f", ls3[argmax(y)])) nm"
@@ -1036,6 +1046,9 @@ version = "0.9.1+5"
 # ╟─a2e492b5-b732-4294-97f7-9b87f4445ac2
 # ╟─7bde5afe-b361-47ae-a828-9c9bc18c9f90
 # ╠═3cae087f-21b6-4bdf-b1cc-d14f044f915e
+# ╠═041bb380-e08a-4ef9-b854-4f5fd623f929
+# ╠═92ad16ba-31ad-4e27-8589-dcb1107a23a3
+# ╠═b31d28d2-1dd5-49ca-abcf-fa968d212bbc
 # ╠═bf81999a-cf98-4833-a629-0cc4ed44d2d6
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
